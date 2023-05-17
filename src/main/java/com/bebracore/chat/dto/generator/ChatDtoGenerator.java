@@ -1,6 +1,7 @@
 package com.bebracore.chat.dto.generator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,21 @@ public class ChatDtoGenerator {
 		chats.forEach(chat -> {
 			ChatDto dto = createDto(chat);
 			dtos.add(dto);
+		});
+
+		dtos.sort(new Comparator<ChatDto>() {
+
+			@Override
+			public int compare(ChatDto o1, ChatDto o2) {
+				if(o1.getLastMessage() == null) {
+					return -1;
+				}
+				else if(o2.getLastMessage() == null) {
+					return 1;
+				}
+				return o2.getLastMessage().getCreatedOn().compareTo(o1.getLastMessage().getCreatedOn());
+			}
+
 		});
 
 		return dtos;
